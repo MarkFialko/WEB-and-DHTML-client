@@ -1,11 +1,14 @@
 <template>
-    <div> hello world</div>
+  <div class="body">hello world</div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style scoped>
-
+<style lang="scss">
+.body {
+  background: black;
+  margin: 0 auto;
+  color: green;
+  max-width: $containerWidth;
+}
 </style>
