@@ -1,7 +1,7 @@
 <template>
-  <div class="container wrapper">
+  <div class="wrapper app-layout">
     <AppHeader />
-    <main class='main'>
+    <main class="main">
       <slot />
     </main>
     <AppFooter />
@@ -9,10 +9,14 @@
 </template>
 
 <script setup lang="ts">
-import AppHeader from '@/widgets/AppHeader.vue'
+import AppHeader from '@/widgets/app-header/AppHeader.vue'
 import AppFooter from '@/widgets/AppFooter.vue'
 </script>
 
 <style lang="scss">
-
+.app-layout {
+  main {
+    margin-top: 20px;
+  }
+}
 </style>
