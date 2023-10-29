@@ -1,4 +1,6 @@
-@import url('./normalize.css');
+@import 'normalize.css';
+@import 'reset.css';
+@import 'fonts';
 
 .container {
   max-width: $containerWidth;
@@ -7,7 +9,9 @@
 }
 
 html, body {
+  font-family: 'Roboto', serif;
   height: 100%;
+  color: $primary-text-color;
 }
 
 #app {
