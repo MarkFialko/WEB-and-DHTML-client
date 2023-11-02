@@ -1,13 +1,23 @@
 <template>
   <div class="container main-page">
     <div class="dishes-block">
-      <DishCard v-for='dish in dishes' :key='dish.id'
-                :name='dish.name'
-                :price='dish.price'
-                :description='dish.description'
-                :id='dish._id'
-      />
+      <span v-if="loading">Загрузка...</span>
 
+      <template v-else>
+        <span v-if="dishes.length === 0">Не удалось получить меню :(</span>
+
+        <template v-else>
+          <DishCard
+            v-for="dish in dishes"
+            :key="dish.id"
+            :name="dish.name"
+            :price="dish.price"
+            :description="dish.description"
+            :id="dish._id"
+            :image="dish.image"
+          />
+        </template>
+      </template>
     </div>
   </div>
 </template>
@@ -21,21 +31,22 @@ const loading = ref(false)
 
 const dishes = ref([])
 
-onMounted(()=> {
+onMounted(() => {
   getDishes()
 })
 
 const getDishes = async () => {
   loading.value = true
   try {
-      const response = await DishApi.getAll()
-    console.log(response.dishes)
-    dishes.value = response.dishes
-  } catch (e) {
+    const response = await DishApi.getAll()
 
+    dishes.value = response.data.dishes
+  } catch (e) {
+    dishes.value = []
+  } finally {
+    loading.value = false
   }
 }
-
 </script>
 
 <style lang="scss">
