@@ -30,7 +30,8 @@ export const routes: RouteRecordRaw[] = [
   {
     path: `/${Routes.SHOPPING_CART}`,
     meta: {
-      layout: Layouts.APP
+      layout: Layouts.APP,
+      authRequired: true
     },
     component: () => import('@/views/shopping-cart/ShoppingCart.vue')
   },
@@ -38,7 +39,8 @@ export const routes: RouteRecordRaw[] = [
   {
     path: `/${Routes.ORDERS}`,
     meta: {
-      layout: Layouts.ACCOUNT
+      layout: Layouts.ACCOUNT,
+      authRequired: true
     },
     component: () => import('@/modules/account/views/Orders.vue')
   },
