@@ -1,0 +1,110 @@
+<template>
+  <div class="container shopping-cart-container">
+    <div class="shopping-cart-dishes">
+      <div class="shopping-cart-dish" v-for="basketItem in basket">
+        <img :src="basketItem.image" :alt="basketItem.name" />
+        <h3 class="shopping-cart-dish__title">{{ basketItem.name }}</h3>
+        <div>Цена: {{ basketItem.price }}</div>
+        <p>Описание: {{ basketItem.description }}</p>
+        <div class="shopping-cart-dish__activities">
+          <div @click='add(basketItem.id)' :class="{ disabled: loading }" class="plus">+</div>
+          <div class="count">{{ basketItem.count }}</div>
+          <div @click='remove(basketItem.id)' :class="{ disabled: loading }" class="minus">-</div>
+        </div>
+      </div>
+      <AppButton @click='createOrder'>Сделать заказ</AppButton>
+
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
+import { BasketApi } from '@/api/Basket.api'
+import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
+
+const store = useStore()
+const basket = computed(() => store.getters['account/getBasket'])
+
+const loading = ref(false)
+
+const add = async (id:string) => {
+  loading.value = true
+  const { data: newBasket } = await BasketApi.add([id])
+  store.commit('account/setBasket',newBasket)
+  loading.value = false
+}
+
+const remove = async (id:string) => {
+  loading.value = true
+  const { data: newBasket } = await BasketApi.remove([id])
+  store.commit('account/setBasket',newBasket)
+  loading.value = false
+}
+
+
+const createOrder = () => {
+
+}
+
+</script>
+
+<style lang="scss">
+.shopping-cart {
+  &-container {
+    width: 100%;
+  }
+
+  &-dish {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid $primary-color;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__title {
+    }
+
+    &__activities {
+      margin-top: 15px;
+      align-items: center;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      justify-content: center;
+      place-items: center;
+
+      .plus {
+        background: $primary-color;
+      }
+
+      .plus,
+      .minus {
+        cursor: pointer;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+
+        &.disabled {
+          pointer-events: none;
+          opacity: 0.5;
+        }
+      }
+
+      .minus {
+        background: $accent-color;
+      }
+    }
+  }
+
+  &-dishes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+}
+</style>
