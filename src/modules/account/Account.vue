@@ -1,9 +1,10 @@
 <template>
   <div class="container account-container">
+    <span class="account-hello">Привет, {{ user?.firstName }} {{ user?.lastName }}!</span>
     <div class="account-activities">
       <AppButton @click="logout">Выйти</AppButton>
       <AppButton v-if="user?.roles.includes(Roles.WAITER)" type="link" :to="Routes.ORDERS"
-        >История заказов
+        >Все заказы
       </AppButton>
     </div>
   </div>
@@ -31,6 +32,12 @@ const user = computed(() => store.getters['account/getUser'])
 .account {
   &-container {
     width: 100%;
+  }
+
+  &-hello {
+    font-size: 30px;
+    display: inline-block;
+    margin-bottom: 20px;
   }
 
   &-activities {
