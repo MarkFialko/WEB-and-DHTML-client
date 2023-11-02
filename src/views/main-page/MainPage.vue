@@ -1,20 +1,20 @@
 <template>
-  <div class="container main-page">
-    <div class="dishes-block">
-      <span v-if="loading">Загрузка...</span>
+  <div class='container main-page'>
+    <div class='dishes-block'>
+      <span v-if='loading'>Загрузка...</span>
 
       <template v-else>
-        <span v-if="dishes.length === 0">Не удалось получить меню :(</span>
+        <span v-if='dishes.length === 0'>Не удалось получить меню :(</span>
 
         <template v-else>
           <DishCard
-            v-for="dish in dishes"
-            :key="dish.id"
-            :name="dish.name"
-            :price="dish.price"
-            :description="dish.description"
-            :id="dish._id"
-            :image="dish.image"
+            v-for='dish in dishes'
+            :key='dish.id'
+            :name='dish.name'
+            :price='dish.price'
+            :description='dish.description'
+            :id='dish._id'
+            :image='dish.image'
           />
         </template>
       </template>
@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import DishCard from '@/shared/components/DishCard.vue'
 import { onMounted, ref } from 'vue'
 import { DishApi } from '@/api/Dish.api'
@@ -49,10 +49,19 @@ const getDishes = async () => {
 }
 </script>
 
-<style lang="scss">
+<style lang='scss'>
 .dishes-block {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  @media (max-width: $lg) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (max-width: $md) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: $tn) {
+    grid-template-columns: 1fr;
+  }
   gap: 16px;
 }
 </style>

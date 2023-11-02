@@ -10,10 +10,10 @@
         <p class="dish-card__price">
           <span>{{ price }}</span> ₽
         </p>
-        <AppButton v-if='isAuth' :disabled="loading" @click="addToCart" class="dish-card__button"
-          >В корзину</AppButton
-        >
-        <AppButton type='link' v-else :to='Routes.LOGIN'>Войти</AppButton>
+        <AppButton v-if="isAuth" :disabled="loading" @click="addToCart" class="dish-card__button"
+          >В корзину
+        </AppButton>
+        <AppButton type="link" v-else :to="Routes.LOGIN">Войти</AppButton>
       </div>
     </div>
   </div>
@@ -38,12 +38,12 @@ const props = defineProps<Props>()
 const store = useStore()
 const loading = ref(false)
 
-const isAuth = computed(()=>store.getters['account/getIsAuth'])
+const isAuth = computed(() => store.getters['account/getIsAuth'])
 
 const addToCart = async () => {
   loading.value = true
   const { data: newBasket } = await BasketApi.add([props.id])
-  store.commit('account/setBasket',newBasket)
+  store.commit('account/setBasket', newBasket)
   loading.value = false
 }
 </script>
@@ -57,6 +57,9 @@ const addToCart = async () => {
   border-radius: 12px;
   gap: 15px;
   overflow: hidden;
+  @media (max-width: $tn) {
+    max-width: none;
+  }
 
   &__image {
     height: 264px;
@@ -85,6 +88,10 @@ const addToCart = async () => {
     gap: 8px;
     width: 100%;
     justify-content: space-between;
+    @media (max-width: $tn) {
+      flex-direction: column;
+
+    }
   }
 
   &__price {
