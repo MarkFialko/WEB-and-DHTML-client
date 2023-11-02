@@ -1,7 +1,7 @@
 <template>
   <div class="dish-card">
     <div class="dish-card__image">
-      <img v-if="image" :src="image" :alt="title" />
+      <img v-if="image" :src="image" :alt="name" />
       <div v-else class="dish-card__image_empty"></div>
     </div>
     <div class="dish-card__info">
@@ -10,9 +10,10 @@
         <p class="dish-card__price">
           <span>{{ price }}</span> ₽
         </p>
-        <AppButton :disabled="loading" @click="addToCart" class="dish-card__button"
+        <AppButton v-if='isAuth' :disabled="loading" @click="addToCart" class="dish-card__button"
           >В корзину</AppButton
         >
+        <AppButton type='link' v-else :to='Routes.LOGIN'>Войти</AppButton>
       </div>
     </div>
   </div>
@@ -20,9 +21,10 @@
 
 <script setup lang="ts">
 import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { BasketApi } from '@/api/Basket.api'
 import { useStore } from 'vuex'
+import { Routes } from '@/app/router/types'
 
 interface Props {
   name: string
@@ -35,6 +37,8 @@ interface Props {
 const props = defineProps<Props>()
 const store = useStore()
 const loading = ref(false)
+
+const isAuth = computed(()=>store.getters['account/getIsAuth'])
 
 const addToCart = async () => {
   loading.value = true
