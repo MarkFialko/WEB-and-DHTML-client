@@ -2,7 +2,7 @@
   <header class="app-header">
     <AppHeaderTop />
     <AppHeaderMain />
-    <AppHeaderBottom />
+<!--    <AppHeaderBottom />-->
   </header>
 </template>
 

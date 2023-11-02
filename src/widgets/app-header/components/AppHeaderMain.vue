@@ -2,7 +2,7 @@
   <div class="app-header-main">
     <div class="container app-header-main__container">
       <Logo />
-      <router-link :to="Routes.SHOPPING_CART" class="user-basket">
+      <router-link v-if='isAuth' :to="Routes.SHOPPING_CART" class="user-basket">
         <div class="user-basket__info">
           <p class="user-basket__text">Ваша корзина</p>
           <span class="user-basket__sum">{{ currentPrice }} руб.</span>
@@ -24,6 +24,7 @@ const store = useStore()
 
 const basket = computed(() => store.getters['account/getBasket'])
 const user = computed(() => store.getters['account/getUser'])
+const isAuth = computed(() => store.getters['account/getIsAuth'])
 const currentPrice = ref(0)
 
 watch(
