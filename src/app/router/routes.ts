@@ -27,4 +27,20 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('@/modules/account/views/Registration.vue')
   },
 
+  {
+    path: `/${Routes.SHOPPING_CART}`,
+    meta: {
+      layout: Layouts.APP
+    },
+    component: () => import('@/views/shopping-cart/ShoppingCart.vue')
+  },
+
+  {
+    path: `/${Routes.ACCOUNT}`,
+    meta: {
+      layout: Layouts.ACCOUNT,
+      authRequired: true
+    },
+    component: () => import('@/modules/account/Account.vue')
+  }
 ]
