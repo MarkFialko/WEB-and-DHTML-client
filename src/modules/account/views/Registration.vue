@@ -17,14 +17,21 @@
       <AppInput label="Ваше имя и фаимилия" placeholder="Владимир Иванов" v-model="fullName" />
       <AppInput label="Электронная почта" placeholder="yourname@mail.com" v-model="email" />
       <div class="register-form__passwords">
-        <AppInput label="Пароль для входа" placeholder="От 5 и более символов" v-model="password" />
         <AppInput
+          type="password"
+          label="Пароль для входа"
+          placeholder="От 5 и более символов"
+          v-model="password"
+        />
+        <AppInput
+          type="password"
           label="Подтвердите пароль"
           placeholder="Повторите пароль"
           v-model="passwordRepeat"
         />
       </div>
-      <AppButton>Создать аккаунт</AppButton>
+      <span v-if="errorMessage !== null" class="text-error">{{ errorMessage }}</span>
+      <AppButton :disabled="buttonDisabled" @click="registration">Создать аккаунт</AppButton>
       <p class="register-form__bottom">
         Уже есть профиль?
         <router-link class="register-form__link" :to="Routes.LOGIN">Войти в аккаунт</router-link>
@@ -34,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import AppInput from '@/shared/ui-kit/app-input/AppInput.vue'
 import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
 
@@ -42,12 +49,28 @@ import giftIcon from '@/modules/account/icons/giftIcon.svg'
 import garantyIcon from '@/modules/account/icons/garantyIcon.svg'
 import paymentIcon from '@/modules/account/icons/paymentIcon.svg'
 import { Routes } from '@/app/router/types'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
+const store = useStore()
+const router = useRouter()
 const fullName = ref('')
 const email = ref('')
 
+const errorMessage = ref()
+
 const password = ref('')
 const passwordRepeat = ref('')
+
+const buttonDisabled = computed(() => {
+  const firstNameValid = fullName.value?.split(' ')[0]?.length >= 3
+  const lastNameValid = fullName.value?.split(' ')[1]?.length >= 3
+  const passwordValid = password.value.length > 4
+  const passwordRepeatValid = password.value === passwordRepeat.value
+  const emailValid = /\S+@\S+\.\S+/.test(email.value)
+
+  return !firstNameValid || !lastNameValid || !passwordValid || !passwordRepeatValid || !emailValid
+})
 
 const REGISTER_BONUSES = [
   {
@@ -69,6 +92,29 @@ const REGISTER_BONUSES = [
     icon: paymentIcon
   }
 ]
+
+const registration = async () => {
+  errorMessage.value = null
+
+  try {
+    const email_ = email.value
+    const password_ = password.value
+    const firstName = fullName.value.split(' ')[0]
+    const lastName = fullName.value.split(' ')[1]
+
+    const data = {
+      email: email_,
+      password: password_,
+      firstName: firstName,
+      lastName: lastName
+    }
+    const isSuccess = await store.dispatch('account/registration', data)
+
+    router.push(`/${Routes.ACCOUNT}`)
+  } catch (e) {
+    errorMessage.value = e.response.data.message
+  }
+}
 </script>
 
 <style lang="scss">

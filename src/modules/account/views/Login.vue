@@ -1,10 +1,10 @@
 <template>
   <div class="container login-container">
-    <form class="login-form">
+    <form @submit='login' class="login-form">
       <p class="login-form__title">Постоянный покупатель</p>
       <AppInput label="Электронная почта" placeholder="yourname@mail.com" v-model="email" />
-      <AppInput label="Ваш пароль" placeholder="От 5 и более символов" v-model="password" />
-      <AppButton>Создать аккаунт</AppButton>
+      <AppInput type='password' label="Ваш пароль" placeholder="От 5 и более символов" v-model="password" />
+      <AppButton @click="login">Войти</AppButton>
     </form>
     <div class="login-info">
       <div class="login-info__container">
@@ -28,38 +28,26 @@
 import { ref } from 'vue'
 import AppInput from '@/shared/ui-kit/app-input/AppInput.vue'
 import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
-
-import giftIcon from '@/modules/account/icons/giftIcon.svg'
-import garantyIcon from '@/modules/account/icons/garantyIcon.svg'
-import paymentIcon from '@/modules/account/icons/paymentIcon.svg'
 import { Routes } from '@/app/router/types'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
-const fullName = ref('')
+const router = useRouter()
+const store = useStore()
 const email = ref('')
 
 const password = ref('')
-const passwordRepeat = ref('')
 
-const REGISTER_BONUSES = [
-  {
-    title: 'Возвращаем 10% бонусами',
-    description:
-      'При заказе на сумму от 3500 руб. и весе до 3 кг. предоставляется бесплатная доставка по всей Россиию',
-    icon: giftIcon
-  },
-  {
-    title: 'Гарантия качества',
-    description:
-      'При заказе на сумму от 3500 руб. и весе до 3 кг. предоставляется бесплатная доставка по всей Россиию',
-    icon: garantyIcon
-  },
-  {
-    title: 'Удобные способы оплаты',
-    description:
-      'При заказе на сумму от 3500 руб. и весе до 3 кг. предоставляется бесплатная доставка по всей Россиию',
-    icon: paymentIcon
-  }
-]
+const login = async () => {
+  store
+    .dispatch('account/login', {
+      email: email.value,
+      password: password.value
+    })
+    .then(() => {
+      router.push(`/${Routes.ACCOUNT}`)
+    })
+}
 </script>
 
 <style lang="scss">
