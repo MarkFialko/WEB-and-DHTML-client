@@ -2,6 +2,7 @@
   <div class="app-input">
     <label class="app-inout__label">{{ label }}</label>
     <input
+      v-bind='$attrs'
       class="app-input__input"
       :placeholder="placeholder"
       :value="modelValue"
