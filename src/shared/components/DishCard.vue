@@ -5,12 +5,14 @@
       <div v-else class="dish-card__image_empty"></div>
     </div>
     <div class="dish-card__info">
-      <p class="dish-card__title">{{ title }}</p>
+      <p class="dish-card__title">{{ name }}</p>
       <div class="dish-card__actions">
         <p class="dish-card__price">
           <span>{{ price }}</span> ₽
         </p>
-        <AppButton class="dish-card__button">В корзину</AppButton>
+        <AppButton :disabled="loading" @click="addToCart" class="dish-card__button"
+          >В корзину</AppButton
+        >
       </div>
     </div>
   </div>
@@ -18,18 +20,28 @@
 
 <script setup lang="ts">
 import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
+import { ref } from 'vue'
+import { BasketApi } from '@/api/Basket.api'
+import { useStore } from 'vuex'
 
 interface Props {
-  title: string
+  name: string
   price: number
+  description: string
   image: string
+  id: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  title: 'Сырный крем-суп',
-  price: 299,
-  image: ''
-})
+const props = defineProps<Props>()
+const store = useStore()
+const loading = ref(false)
+
+const addToCart = async () => {
+  loading.value = true
+  const { data: newBasket } = await BasketApi.add([props.id])
+  store.commit('account/setBasket',newBasket)
+  loading.value = false
+}
 </script>
 
 <style lang="scss">
