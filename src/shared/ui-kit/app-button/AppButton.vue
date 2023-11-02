@@ -4,7 +4,7 @@
     v-if="type === 'button'"
     @click.prevent
     class="app-button"
-    :class="[variant,loading || disabled? 'disabled' : '']"
+    :class="[variant, loading || disabled ? 'disabled' : '']"
   >
     <template v-if="loading">
       <Spinner />
@@ -18,7 +18,7 @@
     v-if="type === 'link'"
     :to="to"
     class="app-button"
-    :class="[variant,loading || disabled? 'disabled' : '']"
+    :class="[variant, loading || disabled ? 'disabled' : '']"
   >
     <template v-if="loading">
       <Spinner />
@@ -51,6 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
 <style lang="scss">
 .app-button {
   cursor: pointer;
+  padding: 0 10px;
   height: 48px;
   display: flex;
   align-items: center;

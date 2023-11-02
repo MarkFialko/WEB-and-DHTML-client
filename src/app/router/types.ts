@@ -6,5 +6,7 @@ export enum Routes {
 
   SHOPPING_CART = 'shopping_cart',
 
+  ORDERS = 'orders',
+
   MENU = 'menu',
 }
