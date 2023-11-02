@@ -1,6 +1,5 @@
 <template>
   <div class="order-card">
-    <p class="order-card__id">Номер заказа: №{{ order.id }}</p>
     <div class="order-card__dishes">
       <div class="order-card__dish" v-for="dish in order.dishes" :key="dish.id">
         {{ dish.name }}
@@ -8,7 +7,7 @@
     </div>
     <p class="order-card__status">Статус: {{ order.status }}</p>
     <AppButton
-      :loading='loading'
+      :loading="loading"
       @click="completeOrder"
       v-if="user?.roles.includes(Roles.WAITER) && order.status !== 'Завершён'"
       >Выполнить заказ
@@ -28,7 +27,7 @@ interface Props {
 }
 
 interface Emits {
-  (e:'update-orders'): void
+  (e: 'update-orders'): void
 }
 
 const loading = ref(false)
