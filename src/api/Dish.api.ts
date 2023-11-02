@@ -6,10 +6,10 @@ export class DishApi {
   }
 
   public static async create(data: any) {
-    return axiosInstance.post('basket/add', data)
+    return axiosInstance.post('dishes/', data)
   }
 
   public static async getOne(dishId: string) {
-    return axiosInstance.get(`basket/${dishId}`)
+    return axiosInstance.get(`dishes/${dishId}`)
   }
 }
