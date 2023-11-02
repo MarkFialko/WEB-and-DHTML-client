@@ -4,8 +4,7 @@
     v-if="type === 'button'"
     @click.prevent
     class="app-button"
-    :class="[variant]"
-    :disabled="loading || disabled"
+    :class="[variant,loading || disabled? 'disabled' : '']"
   >
     <template v-if="loading">
       <Spinner />
@@ -19,8 +18,7 @@
     v-if="type === 'link'"
     :to="to"
     class="app-button"
-    :class="[variant]"
-    :disabled="loading || disabled"
+    :class="[variant,loading || disabled? 'disabled' : '']"
   >
     <template v-if="loading">
       <Spinner />
@@ -62,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
   color: #ffffff;
   border: none;
 
-  &[disabled=true] {
+  &.disabled {
     background: rgba($primary-color, 0.5);
     pointer-events: none;
     cursor: default;
@@ -73,7 +71,7 @@ const props = withDefaults(defineProps<Props>(), {
     border: 1px solid $primary-color;
     color: $primary-color;
 
-    &[disabled=true] {
+    &.disabled {
       background: transparent;
       border: 1px solid rgba($primary-color, 0.5);
     }
