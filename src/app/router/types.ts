@@ -4,5 +4,7 @@ export enum Routes {
 
   ACCOUNT = 'account',
 
+  SHOPPING_CART = 'shopping_cart',
+
   MENU = 'menu',
 }
