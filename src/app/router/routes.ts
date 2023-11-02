@@ -36,6 +36,14 @@ export const routes: RouteRecordRaw[] = [
   },
 
   {
+    path: `/${Routes.ORDERS}`,
+    meta: {
+      layout: Layouts.ACCOUNT
+    },
+    component: () => import('@/modules/account/views/Orders.vue')
+  },
+
+  {
     path: `/${Routes.ACCOUNT}`,
     meta: {
       layout: Layouts.ACCOUNT,
