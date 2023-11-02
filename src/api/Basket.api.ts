@@ -6,17 +6,16 @@ export class BasketApi {
   }
 
   public static async add(dishes: string[]) {
-    return axiosInstance.post('basket/add',{
+    return axiosInstance.post('basket/add', {
       dishId: dishes
     })
   }
 
   public static async remove(dishes: string[]) {
     return axiosInstance.delete('basket', {
-    data: {
-      dishId: dishes
-    }
-  })
+      data: {
+        dishId: dishes
+      }
+    })
   }
-
 }
