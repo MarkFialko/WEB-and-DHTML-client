@@ -23,6 +23,7 @@ import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { BasketApi } from '@/api/Basket.api'
 import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
+import { OrderApi } from '@/api/Order.api'
 
 const store = useStore()
 const basket = computed(() => store.getters['account/getBasket'])
@@ -44,8 +45,9 @@ const remove = async (id:string) => {
 }
 
 
-const createOrder = () => {
-
+const createOrder = async () => {
+    const response = await OrderApi.createOrder()
+  console.log(response,'response')
 }
 
 </script>
