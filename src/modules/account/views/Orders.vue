@@ -4,7 +4,12 @@
     <span v-if="orders.length === 0 && !loading">Заказов пока нет :(</span>
     <template v-else>
       <div class="orders__content">
-        <OrderCard v-for="(order, i) in orders" :key="i" :order="order" />
+        <OrderCard
+          @update-orders="getOrders"
+          v-for="(order, i) in orders"
+          :key="i"
+          :order="order"
+        />
       </div>
     </template>
   </div>
@@ -18,6 +23,10 @@ import OrderCard from '@/modules/account/components/OrderCard.vue'
 const orders = ref([])
 const loading = ref(false)
 onMounted(async () => {
+  await getOrders()
+})
+
+const getOrders = async () => {
   try {
     loading.value = true
     const data = await OrderApi.getAllOrders()
@@ -28,7 +37,7 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
 </script>
 
 <style scoped lang="scss">

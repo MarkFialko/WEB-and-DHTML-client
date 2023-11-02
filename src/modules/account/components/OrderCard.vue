@@ -7,13 +7,18 @@
       </div>
     </div>
     <p class="order-card__status">Статус: {{ order.status }}</p>
-    <AppButton @click='completeOrder' v-if="user?.roles.includes(Roles.WAITER) && order.status !== 'Завершён'">Выполнить заказ</AppButton>
+    <AppButton
+      :loading='loading'
+      @click="completeOrder"
+      v-if="user?.roles.includes(Roles.WAITER) && order.status !== 'Завершён'"
+      >Выполнить заказ
+    </AppButton>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Roles } from '@/modules/account/account.types'
 import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
 import { OrderApi } from '@/api/Order.api'
@@ -22,16 +27,25 @@ interface Props {
   order: any
 }
 
+interface Emits {
+  (e:'update-orders'): void
+}
+
+const loading = ref(false)
+
 const store = useStore()
 
 const props = defineProps<Props>()
-
+const emits = defineEmits<Emits>()
 const user = computed(() => store.getters['account/getUser'])
 
 const completeOrder = async () => {
-const response = await OrderApi.completeOrder(props.order.id)
+  loading.value = true
+  const response = await OrderApi.completeOrder(props.order.id)
+  emits('update-orders')
+  console.log(response, 'response')
+  loading.value = false
 }
-
 </script>
 
 <style scoped lang="scss">
