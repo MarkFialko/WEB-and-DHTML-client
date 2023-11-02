@@ -1,20 +1,38 @@
 <template>
   <div class="container shopping-cart-container">
-    <div class="shopping-cart-dishes">
+    <div v-if="Object.keys(basket).length === 0">Тут пусто :( Добавьте товары в корзину</div>
+    <div v-else class="shopping-cart-dishes">
       <div class="shopping-cart-dish" v-for="basketItem in basket">
         <img :src="basketItem.image" :alt="basketItem.name" />
         <h3 class="shopping-cart-dish__title">{{ basketItem.name }}</h3>
         <div>Цена: {{ basketItem.price }}</div>
         <p>Описание: {{ basketItem.description }}</p>
         <div class="shopping-cart-dish__activities">
-          <div @click='add(basketItem.id)' :class="{ disabled: loading }" class="plus">+</div>
+          <div
+            @click="add(basketItem.id)"
+            :class="{ disabled: loading || createOrderLoading }"
+            class="plus"
+          >
+            +
+          </div>
           <div class="count">{{ basketItem.count }}</div>
-          <div @click='remove(basketItem.id)' :class="{ disabled: loading }" class="minus">-</div>
+          <div
+            @click="remove(basketItem.id)"
+            :class="{ disabled: loading || createOrderLoading }"
+            class="minus"
+          >
+            -
+          </div>
         </div>
       </div>
-      <AppButton @click='createOrder'>Сделать заказ</AppButton>
-
     </div>
+    <AppButton
+      class="shopping-cart__order"
+      :disabled="createOrderLoading"
+      v-if="Object.keys(basket).length > 0"
+      @click="createOrder"
+      >Сделать заказ
+    </AppButton>
   </div>
 </template>
 
@@ -28,32 +46,40 @@ import { OrderApi } from '@/api/Order.api'
 const store = useStore()
 const basket = computed(() => store.getters['account/getBasket'])
 
+const createOrderLoading = ref(false)
+
 const loading = ref(false)
 
-const add = async (id:string) => {
+const add = async (id: string) => {
   loading.value = true
   const { data: newBasket } = await BasketApi.add([id])
-  store.commit('account/setBasket',newBasket)
+  store.commit('account/setBasket', newBasket)
   loading.value = false
 }
 
-const remove = async (id:string) => {
+const remove = async (id: string) => {
   loading.value = true
   const { data: newBasket } = await BasketApi.remove([id])
-  store.commit('account/setBasket',newBasket)
+  store.commit('account/setBasket', newBasket)
   loading.value = false
 }
 
-
 const createOrder = async () => {
-    const response = await OrderApi.createOrder()
-  console.log(response,'response')
+  createOrderLoading.value = true
+  const response = await OrderApi.createOrder()
+  await store.dispatch('account/getMe')
+  console.log(response, 'response')
+  createOrderLoading.value = false
 }
-
 </script>
 
 <style lang="scss">
 .shopping-cart {
+  &__order {
+    width: 100%;
+    margin-top: 20px;
+  }
+
   &-container {
     width: 100%;
   }
