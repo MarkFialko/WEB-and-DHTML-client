@@ -13,7 +13,7 @@
             :name='dish.name'
             :price='dish.price'
             :description='dish.description'
-            :id='dish._id'
+            :id='dish.id'
             :image='dish.image'
           />
         </template>

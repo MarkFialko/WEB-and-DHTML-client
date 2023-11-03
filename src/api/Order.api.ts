@@ -15,7 +15,7 @@ export class OrderApi {
     return axiosInstance.get('orders')
   }
 
-  public getMyOrders() {
+  public static getMyOrders() {
     return axiosInstance.get('orders/me')
   }
 }

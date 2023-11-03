@@ -6,6 +6,12 @@
       <AppButton v-if="user?.roles.includes(Roles.WAITER)" type="link" :to="Routes.ORDERS"
         >Все заказы
       </AppButton>
+      <AppButton v-if="user?.roles.includes(Roles.USER)" type='link' :to='Routes.MY_ORDERS'
+      >Мои заказы
+      </AppButton>
+      <AppButton v-if="user?.roles.includes(Roles.ADMIN)" type="link" :to="Routes.USERS"
+      >Пользователи
+      </AppButton>
     </div>
     <div v-if="user?.roles.includes(Roles.ADMIN)">
       <div class="account-create-order">
@@ -30,6 +36,7 @@ import { computed, ref } from 'vue'
 import { Roles } from '@/modules/account/account.types'
 import AppInput from '@/shared/ui-kit/app-input/AppInput.vue'
 import { DishApi } from '@/api/Dish.api'
+import { OrderApi } from '@/api/Order.api'
 
 const store = useStore()
 const router = useRouter()
@@ -57,7 +64,7 @@ const createDish = async () => {
     image: ''
   }
 
-  const response = await DishApi.create(data)
+  await DishApi.create(data)
 
   dishName.value = ''
   dishPrice.value = 0
@@ -65,6 +72,7 @@ const createDish = async () => {
 
   loading.value = false
 }
+
 
 const user = computed(() => store.getters['account/getUser'])
 </script>

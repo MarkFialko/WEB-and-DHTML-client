@@ -1,4 +1,5 @@
 import axiosInstance from '@/api/index'
+import type { Roles } from '@/modules/account/account.types'
 
 export class UserApi {
   public static async getMe() {
@@ -29,6 +30,19 @@ export class UserApi {
 
   public static async logout() {
     return axiosInstance.post('auth/logout')
+  }
+
+  public static async getUsers() {
+    return axiosInstance.get('auth/users')
+  }
+
+  public static async deleteRole(userId:string, role: Roles) {
+    return axiosInstance.delete('auth/roles', {
+      data: {
+        userId:userId,
+        role: role,
+      }
+    })
   }
 
 }

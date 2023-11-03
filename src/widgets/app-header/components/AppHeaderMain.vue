@@ -2,10 +2,10 @@
   <div class="app-header-main">
     <div class="container app-header-main__container">
       <Logo />
-      <router-link v-if='isAuth' :to="Routes.SHOPPING_CART" class="user-basket">
+      <router-link v-if="isAuth" :to="Routes.SHOPPING_CART" class="user-basket">
         <div class="user-basket__info">
           <p class="user-basket__text">Ваша корзина</p>
-          <span class="user-basket__sum">{{ currentPrice }} руб.</span>
+          <span class="user-basket__sum">{{ basket?.price }} руб.</span>
         </div>
         <CartIcon />
       </router-link>
@@ -18,42 +18,13 @@ import Logo from '@/shared/components/Logo.vue'
 import CartIcon from '@/widgets/app-header/icons/CartIcon.vue'
 import { Routes } from '@/app/router/types'
 import { useStore } from 'vuex'
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 
 const store = useStore()
 
 const basket = computed(() => store.getters['account/getBasket'])
 const user = computed(() => store.getters['account/getUser'])
 const isAuth = computed(() => store.getters['account/getIsAuth'])
-const currentPrice = ref(0)
-
-watch(
-  basket,
-  () => {
-    if (basket.value) {
-      currentPrice.value = <number>Object.values(basket.value).reduce((acc, curr) => {
-        return acc + curr.price * curr.count
-      }, 0)
-
-      return
-    }
-    currentPrice.value = 0
-  },
-  {
-    deep: true,
-    immediate: true
-  }
-)
-
-watch(user, () => {
-  console.log('user',user.value)
-  if (!user.value) {
-    currentPrice.value = 0
-  }
-},{
-  immediate: true,
-  deep:true,
-})
 </script>
 
 <style lang="scss">

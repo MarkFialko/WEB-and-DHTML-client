@@ -37,6 +37,24 @@ export const routes: RouteRecordRaw[] = [
   },
 
   {
+    path: `/${Routes.USERS}`,
+    meta: {
+      layout: Layouts.APP,
+      authRequired: true
+    },
+    component: () => import('@/views/users/Users.vue')
+  },
+
+  {
+    path: `/${Routes.MY_ORDERS}`,
+    meta: {
+      layout: Layouts.APP,
+      authRequired: true
+    },
+    component: () => import('@/modules/account/views/MyOrders.vue')
+  },
+
+  {
     path: `/${Routes.ORDERS}`,
     meta: {
       layout: Layouts.ACCOUNT,

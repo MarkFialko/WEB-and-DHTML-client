@@ -1,8 +1,8 @@
 <template>
   <div class="order-card">
     <div class="order-card__dishes">
-      <div class="order-card__dish" v-for="dish in order.dishes" :key="dish.id">
-        {{ dish.name }}
+      <div class="order-card__dish" v-for="{ dish, count } in order.dishes" :key="dish.id">
+        {{ dish.name }} {{ count }}шт
       </div>
     </div>
     <p class="order-card__status">Статус: {{ order.status }}</p>
@@ -40,9 +40,8 @@ const user = computed(() => store.getters['account/getUser'])
 
 const completeOrder = async () => {
   loading.value = true
-  const response = await OrderApi.completeOrder(props.order.id)
+  await OrderApi.completeOrder(props.order.order)
   emits('update-orders')
-  console.log(response, 'response')
   loading.value = false
 }
 </script>

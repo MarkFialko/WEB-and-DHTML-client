@@ -33,7 +33,6 @@ const getOrders = async () => {
   try {
     loading.value = true
     const data = await OrderApi.getAllOrders()
-    console.log(data.data[0])
     orders.value = data.data
   } catch (e) {
     console.log(e)

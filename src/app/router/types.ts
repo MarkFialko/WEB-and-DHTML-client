@@ -8,5 +8,9 @@ export enum Routes {
 
   ORDERS = 'orders',
 
+  MY_ORDERS = 'my-orders',
+
   MENU = 'menu',
+
+  USERS = 'users'
 }

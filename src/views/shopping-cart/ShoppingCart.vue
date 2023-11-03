@@ -1,23 +1,23 @@
 <template>
   <div class="container shopping-cart-container">
-    <div v-if="Object.keys(basket).length === 0">Тут пусто :( Добавьте товары в корзину</div>
+    <div v-if="basket.dishes.length === 0">Тут пусто :( Добавьте товары в корзину</div>
     <div v-else class="shopping-cart-dishes">
-      <div class="shopping-cart-dish" v-for="basketItem in basket">
-        <img :src="basketItem.image" :alt="basketItem.name" />
-        <h3 class="shopping-cart-dish__title">{{ basketItem.name }}</h3>
-        <div>Цена: {{ basketItem.price }}</div>
-        <p>Описание: {{ basketItem.description }}</p>
+      <div class="shopping-cart-dish" v-for="{ dish, count } in basket.dishes">
+        <img :src="dish.image" :alt="dish.name" />
+        <h3 class="shopping-cart-dish__title">{{ dish.name }}</h3>
+        <div>Цена: {{ dish.price }}</div>
+        <p>Описание: {{ dish.description }}</p>
         <div class="shopping-cart-dish__activities">
           <div
-            @click="add(basketItem.id)"
+            @click="add(dish.id)"
             :class="{ disabled: loading || createOrderLoading }"
             class="plus"
           >
             +
           </div>
-          <div class="count">{{ basketItem.count }}</div>
+          <div class="count">{{ count }}</div>
           <div
-            @click="remove(basketItem.id)"
+            @click="remove(dish.id)"
             :class="{ disabled: loading || createOrderLoading }"
             class="minus"
           >
@@ -29,7 +29,7 @@
     <AppButton
       class="shopping-cart__order"
       :disabled="createOrderLoading"
-      v-if="Object.keys(basket).length > 0"
+      v-if="basket.dishes.length > 0"
       @click="createOrder"
       >Сделать заказ
     </AppButton>
@@ -66,9 +66,8 @@ const remove = async (id: string) => {
 
 const createOrder = async () => {
   createOrderLoading.value = true
-  const response = await OrderApi.createOrder()
+  await OrderApi.createOrder()
   await store.dispatch('account/getMe')
-  console.log(response, 'response')
   createOrderLoading.value = false
 }
 </script>
