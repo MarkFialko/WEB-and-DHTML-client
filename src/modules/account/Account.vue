@@ -19,6 +19,8 @@
         <AppInput v-model="dishName" label="Название блюда" placeholder="Введите название блюда" />
         <AppInput type="number" v-model="dishPrice" label="Цена блюда" placeholder="Введите цену" />
         <AppInput v-model="dishDescription" label="Описание блюда" placeholder="Введите описание" />
+        <AppButton  @click='downloadImage'>Загрузить изображение</AppButton>
+
         <AppButton :loading='loading' @click="createDish" :disabled="dishCreateButtonDisabled"
           >Добавить блюдо в меню
         </AppButton>
@@ -37,6 +39,8 @@ import { Roles } from '@/modules/account/account.types'
 import AppInput from '@/shared/ui-kit/app-input/AppInput.vue'
 import { DishApi } from '@/api/Dish.api'
 import { OrderApi } from '@/api/Order.api'
+import axiosInstance from '@/api'
+import axios from 'axios'
 
 const store = useStore()
 const router = useRouter()
@@ -48,11 +52,13 @@ const logout = async () => {
 const dishName = ref('')
 const dishPrice = ref(0)
 const dishDescription = ref('')
+const dishImage = ref('')
 
 const loading = ref(false)
 
 const dishCreateButtonDisabled = computed(() => {
-  return dishName.value.length < 5 || dishPrice.value < 1 || dishDescription.value.length < 15
+  const imageValid = dishImage.value.length > 0
+  return dishName.value.length < 5 || dishPrice.value < 1 || dishDescription.value.length < 15 || !imageValid
 })
 
 const createDish = async () => {
@@ -61,7 +67,7 @@ const createDish = async () => {
     name: dishName.value,
     price: dishPrice.value,
     description: dishDescription.value,
-    image: ''
+    image: dishImage.value
   }
 
   await DishApi.create(data)
@@ -71,6 +77,32 @@ const createDish = async () => {
   dishDescription.value = ''
 
   loading.value = false
+}
+
+const downloadImage = async () => {
+  const file = await new Promise((resolve) => {
+    const input = document.createElement('input')
+
+    input.accept = 'image/png, image/jpeg, image/jpg, image/heic'
+    input.type = 'file'
+    input.multiple = false
+
+    input.onchange = () => {
+      const files = Array.from(input.files)
+      resolve(files[0])
+    }
+
+    input.click()
+  })
+  if (file != null) {
+    const formData = new FormData()
+    formData.append('image',file as Blob)
+    const endLength =import.meta.env.VITE_API_URL.length - 5
+    const { data } = await  axios.post(`${import.meta.env.VITE_API_URL.substring(0,endLength)}/upload`,formData)
+    console.log(data,'data')
+    dishImage.value = `${import.meta.env.VITE_API_URL.substring(0,endLength)}${data.url}`
+    console.log(dishImage.value,'dishimage')
+  }
 }
 
 
