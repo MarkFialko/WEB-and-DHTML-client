@@ -2,7 +2,10 @@
   <div class="order-card">
     <div class="order-card__dishes">
       <div class="order-card__dish" v-for="{ dish, count } in order.dishes" :key="dish.id">
-        {{ dish.name }} {{ count }}шт
+        <div class="order-card__image">
+          <img :src="dish.image" :alt="dish.name" />
+        </div>
+        <p class="order-card__info">{{ dish.name }} {{ count }}шт</p>
       </div>
     </div>
     <p class="order-card__status">Статус: {{ order.status }}</p>
@@ -55,6 +58,10 @@ const completeOrder = async () => {
   flex-direction: column;
   gap: 10px;
 
+  &__image {
+    margin-bottom: 10px;
+  }
+
   &__dishes {
     display: flex;
     flex-direction: column;
@@ -66,6 +73,12 @@ const completeOrder = async () => {
     border: 1px solid #000000;
     border-radius: 4px;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+
+    img {
+      max-width: 100%;
+    }
   }
 
   &__status {

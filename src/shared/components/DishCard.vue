@@ -63,6 +63,16 @@ const addToCart = async () => {
 
   &__image {
     height: 264px;
+    position: relative;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
 
     &_empty {
       width: 100%;
@@ -90,7 +100,6 @@ const addToCart = async () => {
     justify-content: space-between;
     @media (max-width: $tn) {
       flex-direction: column;
-
     }
   }
 

@@ -89,6 +89,10 @@ const createOrder = async () => {
     border: 1px solid $primary-color;
     display: flex;
     flex-direction: column;
+    max-width:100%;
+    img {
+      max-width: 100%;
+    }
     gap: 10px;
 
     &__title {
