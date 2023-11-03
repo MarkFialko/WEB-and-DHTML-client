@@ -4,7 +4,8 @@
       <p class="login-form__title">Постоянный покупатель</p>
       <AppInput label="Электронная почта" placeholder="yourname@mail.com" v-model="email" />
       <AppInput type='password' label="Ваш пароль" placeholder="От 5 и более символов" v-model="password" />
-      <AppButton @click="login">Войти</AppButton>
+      <span v-if="errorMessage !== null" class="text-error">{{ errorMessage }}</span>
+      <AppButton :loading='loading' :disabled='loginButtonDisabled' @click="login">Войти</AppButton>
     </form>
     <div class="login-info">
       <div class="login-info__container">
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import AppInput from '@/shared/ui-kit/app-input/AppInput.vue'
 import AppButton from '@/shared/ui-kit/app-button/AppButton.vue'
 import { Routes } from '@/app/router/types'
@@ -36,9 +37,20 @@ const router = useRouter()
 const store = useStore()
 const email = ref('')
 
+const loading = ref(false)
+
 const password = ref('')
 
+const errorMessage = ref(null)
+
+const loginButtonDisabled = computed(()=> {
+  const emailValid = /\S+@\S+\.\S+/.test(email.value)
+  return !emailValid || password.value.length < 5
+})
+
 const login = async () => {
+  loading.value = true
+  errorMessage.value =  null
   store
     .dispatch('account/login', {
       email: email.value,
@@ -46,6 +58,12 @@ const login = async () => {
     })
     .then(() => {
       router.push(`/${Routes.ACCOUNT}`)
+    })
+    .catch(e=> {
+      errorMessage.value  = e.response.data.message
+    })
+    .finally(()=> {
+      loading.value = false
     })
 }
 </script>
