@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount } from 'vue'
+import { computed, onBeforeMount, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Layouts } from '@/layouts/layouts.types'
 import BlankLayout from '@/layouts/BlankLayout.vue'
@@ -28,6 +28,10 @@ const resolveLayout = computed(() => {
   }
 
   return AppLayout
+})
+
+onMounted(()=> {
+  console.log(import.meta.env.VITE_API_URL)
 })
 
 onBeforeMount(()=> {
