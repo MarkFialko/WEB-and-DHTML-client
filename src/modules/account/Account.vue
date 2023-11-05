@@ -39,7 +39,7 @@ import { Roles } from '@/modules/account/account.types'
 import AppInput from '@/shared/ui-kit/app-input/AppInput.vue'
 import { DishApi } from '@/api/Dish.api'
 import { OrderApi } from '@/api/Order.api'
-import axiosInstance from '@/api'
+import axiosInstance, { API_URL } from '@/api'
 import axios from 'axios'
 
 const store = useStore()
@@ -97,10 +97,10 @@ const downloadImage = async () => {
   if (file != null) {
     const formData = new FormData()
     formData.append('image',file as Blob)
-    const endLength =import.meta.env.VITE_API_URL.length - 5
-    const { data } = await  axios.post(`${import.meta.env.VITE_API_URL.substring(0,endLength)}/upload`,formData)
+    const endLength =API_URL.length - 5
+    const { data } = await  axios.post(`${API_URL.substring(0,endLength)}/upload`,formData)
     console.log(data,'data')
-    dishImage.value = `${import.meta.env.VITE_API_URL.substring(0,endLength)}${data.url}`
+    dishImage.value = `${API_URL.substring(0,endLength)}${data.url}`
     console.log(dishImage.value,'dishimage')
   }
 }

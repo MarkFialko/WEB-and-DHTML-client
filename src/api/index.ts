@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+export const API_URL = 'https://web-and-dhtml-server.onrender.com/api/'
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
@@ -23,7 +25,7 @@ axiosInstance.interceptors.response.use(
     if (error.response.status == 401 && error.config && !error.config._isRetry) {
       originalRequest._isRetry = true
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/auth/refresh`, { withCredentials: true })
+        const response = await axios.get(`${API_URL}/auth/refresh`, { withCredentials: true })
         localStorage.setItem('token', response.data.accessToken)
         return axiosInstance.request(originalRequest)
       } catch (e) {

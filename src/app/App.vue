@@ -30,9 +30,6 @@ const resolveLayout = computed(() => {
   return AppLayout
 })
 
-onMounted(()=> {
-  console.log(import.meta.env.VITE_API_URL,' env')
-})
 
 onBeforeMount(()=> {
   store.dispatch('account/getMe')
