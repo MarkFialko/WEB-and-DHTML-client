@@ -8,11 +8,6 @@ jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
-      - name: Create_ENV
-        run: |
-          touch .env
-          echo VITE_API_URL=${{ secrets.VITE_API_URL }} >> .env
-          cat .env
 
       - name: Build
         uses: actions/checkout@v3
