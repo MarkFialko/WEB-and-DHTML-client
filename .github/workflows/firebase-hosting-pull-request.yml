@@ -8,18 +8,17 @@ jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
+      - name: Create_ENV
+        run: |
+          touch .env
+          echo VITE_API_URL=${{ secrets.VITE_API_URL }} >> .env
+          cat .env
 
       - name: Build
         uses: actions/checkout@v3
 
       - run: npm install
       - run: npm run build-only
-
-        name: Create_env
-      - run: |
-          touch .env
-          echo VITE_API_URL=${{ secrets.VITE_API_URL }} >> .env
-          cat .env
 
       - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
