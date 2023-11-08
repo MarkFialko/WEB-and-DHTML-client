@@ -15,6 +15,9 @@ jobs:
       - run: npm install
       - run: npm run build-only
 
+      - name: Change robots.txt
+        run: cp prod-robots.txt /public/robots.txt
+
       - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
 
