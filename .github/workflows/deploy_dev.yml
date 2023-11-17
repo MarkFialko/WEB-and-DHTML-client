@@ -17,6 +17,8 @@ jobs:
 
       - name: Change robots.txt
         run: cp dev-robots.txt public/robots.txt
+      - name: Show firebaserc
+        run: cat .firebaserc
 
       - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
